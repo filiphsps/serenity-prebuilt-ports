@@ -8,6 +8,8 @@ on:
 jobs:
   build-utils:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v2
 
@@ -28,6 +30,8 @@ jobs:
           path: |
             ./serenity/Build/
             ./serenity/Toolchain/Build
+            ./serenity/Toolchain/Local
+            ./serenity/Toolchain/Tarballs
             ./serenity/Ports/**/*.tar.*
 
       - name: "🔨 Build serenity"
@@ -54,8 +58,14 @@ jobs:
         run: tar -C ./serenity/Build/i686/Root/usr/local/bin -cvf utilities-i686.tar.gz .
 
       - name: "🌎 Upload binaries"
-        uses: skx/github-action-publish-binaries@master
+        uses: softprops/action-gh-release@v1
+        with:
+          body: "Automatic build of SerenityOS utilities"
+          files: utilities-i686.tar.gz
+
+      - name: "🗑️ Delete old releases"
+        uses: dev-drprasad/delete-older-releases@v0.2.0
+        with:
+          keep_latest: 1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          args: "utilities-i686.tar.gz"
