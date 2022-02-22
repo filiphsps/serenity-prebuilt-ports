@@ -83,21 +83,19 @@ jobs:
 
       - name: "🤏 Compress utilities"
         run: tar -C ./serenity/Build/i686/Root/usr/local/bin -cvf utilities-i686.tar.gz .
+        
+      - name: "🏷 Create tag"
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "🌎 Upload binaries"
         uses: softprops/action-gh-release@v1
         with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
           body: "Automatic build of SerenityOS utilities"
           files: utilities-i686.tar.gz
-
-      - name: "🌎 Upload binaries"
-        uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
-          title: "Build utilities"
-          files: |
-            utilities-i686.tar.gz
 
       - name: "🗑️ Delete old releases"
         uses: dev-drprasad/delete-older-releases@v0.2.0
