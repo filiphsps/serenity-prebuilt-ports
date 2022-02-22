@@ -53,9 +53,9 @@ jobs:
       - name: "🤏 Compress utilities"
         run: tar -C ./serenity/Build/i686/Root/usr/local/bin -cvf utilities-i686.tar.gz .
 
-      - name: "🌎 Upload artifacts"
-        uses: actions/upload-artifact@v2
+      - name: "🌎 Upload binaries"
+        uses: skx/github-action-publish-binaries@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: utilities-i686
-          path: ./utilities-i686.tar.gz
-          if-no-files-found: error
+          args: "utilities-i686.tar.gz"
