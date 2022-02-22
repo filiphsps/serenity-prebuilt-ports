@@ -64,6 +64,6 @@ jobs:
       - name: "Upload artifacts"
         uses: actions/upload-artifact@v2
         with:
-          name: utilities-i686.tar.gz
+          name: utilities-i686
           path: ./utilities-i686.tar.gz
           if-no-files-found: error
