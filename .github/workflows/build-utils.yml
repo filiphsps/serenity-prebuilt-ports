@@ -6,8 +6,39 @@ on:
     - cron: "0 0 * * *"
 
 jobs:
+  build-serenity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: "📦 Install Ubuntu dependencies"
+        run: |
+          sudo add-apt-repository -y ppa:canonical-server/server-backports
+          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+          sudo apt-get install -y ccache e2fsprogs gcc-11 g++-11 libstdc++-11-dev libmpfr-dev libmpc-dev ninja-build qemu-utils qemu-system-i386 unzip
+
+      - name: "🐞 Clone serenity repo"
+        run: git clone https://github.com/SerenityOS/serenity
+
+      - name: "💾 Cache toolchain & build"
+        uses: actions/cache@v2
+        with:
+          key: serenity-tools
+          path: |
+            ./serenity/Build/
+            ./serenity/Toolchain/Build
+            ./serenity/Toolchain/Local
+            ./serenity/Toolchain/Tarballs
+            ./serenity/Ports/**/*.tar.*
+
+      - name: "🔨 Build serenity"
+        run: ./Meta/serenity.sh build i686
+        working-directory: ./serenity/
+
   build-utils:
     runs-on: ubuntu-latest
+    needs: build-serenity
     permissions:
       contents: write
     steps:
@@ -26,17 +57,13 @@ jobs:
       - name: "💾 Cache toolchain & build"
         uses: actions/cache@v2
         with:
-          key: ${{ runner.os }}-cache
+          key: serenity-tools
           path: |
             ./serenity/Build/
             ./serenity/Toolchain/Build
             ./serenity/Toolchain/Local
             ./serenity/Toolchain/Tarballs
             ./serenity/Ports/**/*.tar.*
-
-      - name: "🔨 Build serenity"
-        run: ./Meta/serenity.sh build i686
-        working-directory: ./serenity/
 
       - name: "🔨 Build gcc"
         run: ./package.sh
@@ -62,6 +89,15 @@ jobs:
         with:
           body: "Automatic build of SerenityOS utilities"
           files: utilities-i686.tar.gz
+
+      - name: "🌎 Upload binaries"
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          title: "Build utilities"
+          files: |
+            utilities-i686.tar.gz
 
       - name: "🗑️ Delete old releases"
         uses: dev-drprasad/delete-older-releases@v0.2.0
