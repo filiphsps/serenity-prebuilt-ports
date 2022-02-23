@@ -93,7 +93,7 @@ jobs:
       - name: "🌎 Upload binaries"
         uses: softprops/action-gh-release@v1
         with:
-          tag: ${{ steps.tag_version.outputs.new_tag }}
+          tag-name: ${{ steps.tag_version.outputs.new_tag }}
           body: "Automatic build of SerenityOS utilities"
           files: utilities-i686.tar.gz
 
