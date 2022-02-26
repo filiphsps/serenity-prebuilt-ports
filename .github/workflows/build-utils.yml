@@ -2,6 +2,7 @@ name: Build minimum utilities
 
 on:
   push:
+  workflow_dispatch:
   schedule:
     - cron: "0 0 * * *"
 
