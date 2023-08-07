@@ -34,7 +34,7 @@ jobs:
             ./serenity/Ports/**/*.tar.*
 
       - name: 🔨 Build serenity
-        run: ./Meta/serenity.sh build i686
+        run: ./Meta/serenity.sh build x86_64
         working-directory: ./serenity/
 
   build-gcc:
