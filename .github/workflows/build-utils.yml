@@ -71,7 +71,7 @@ jobs:
         working-directory: ./serenity/Ports/gcc/
 
       - name: 🤏 Compress gcc
-        run: tar -C ./serenity/Build/i686/Root/usr/local -czvf gcc.tar.gz .
+        run: tar -C ./serenity/Build/x86_64/Root/usr/local -czvf gcc.tar.gz .
         
       - name: 🌎 Deploy gcc
         uses: actions/upload-artifact@v2
@@ -113,7 +113,7 @@ jobs:
         working-directory: ./serenity/Ports/make/
 
       - name: 🤏 Compress make
-        run: tar -C ./serenity/Build/i686/Root/usr/local -czvf make.tar.gz .
+        run: tar -C ./serenity/Build/x86_64/Root/usr/local -czvf make.tar.gz .
         
       - name: 🌎 Deploy make
         uses: actions/upload-artifact@v2
@@ -159,7 +159,7 @@ jobs:
         working-directory: ./serenity/Ports/git/
 
       - name: 🤏 Compress binutils
-        run: tar -C ./serenity/Build/i686/Root/usr/local -czvf binutils.tar.gz .
+        run: tar -C ./serenity/Build/x86_64/Root/usr/local -czvf binutils.tar.gz .
         
       - name: 🌎 Deploy binutils
         uses: actions/upload-artifact@v2
@@ -201,7 +201,7 @@ jobs:
         working-directory: ./serenity/Ports/git/
 
       - name: 🤏 Compress git
-        run: tar -C ./serenity/Build/i686/Root/usr/local -czvf git.tar.gz .
+        run: tar -C ./serenity/Build/x86_64/Root/usr/local -czvf git.tar.gz .
         
       - name: 🌎 Deploy git
         uses: actions/upload-artifact@v2
